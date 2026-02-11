@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Xem điểm sinh viên</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#e9edf3;
+}
+.header{
+    background:#1f78c1;
+    color:white;
+    padding:10px 20px;
+    font-size:14px;
+}
+.nav{
+    background:#f5f5f5;
+    border-bottom:2px solid #1f78c1;
+    padding:8px 20px;
+}
+.nav span{
+    margin-right:15px;
+    font-weight:bold;
+    color:#1f78c1;
+}
+.container{
+    width:1100px;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+}
+.info-box{
+    width:550px;
+    border:2px solid #6cb3e6;
+    background:#eef7ff;
+    padding:15px;
+    border-radius:6px;
+    margin-bottom:20px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+}
+th,td{
+    border:1px solid #ccc;
+    padding:6px;
+    text-align:center;
+}
+th{
+    background:#1f78c1;
+    color:white;
+}
+.semester-title{
+    background:#f0f0f0;
+    padding:8px;
+    font-weight:bold;
+    margin-top:25px;
+}
+.summary{
+    margin-top:5px;
+    font-weight:bold;
+}
+.login{
+    width:320px;
+    margin:120px auto;
+    background:white;
+    padding:20px;
+    border-radius:6px;
+    text-align:center;
+}
+input,button{
+    width:100%;
+    padding:8px;
+    margin-top:10px;
+}
+button{
+    background:#1f78c1;
+    color:white;
+    border:none;
+}
+.fail{ color:red; font-weight:bold; }
+.pass{ color:green; font-weight:bold; }
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginBox">
+    <div style="
+    font-weight:bold;
+    color:#1f78c1;
+    margin-bottom:10px;
+">
+ĐẠI HỌC CÔNG NGHỆ THÔNG TIN TP HỒ CHÍ MINH
+</div>
+
+<h3>Đăng nhập</h3>
+<input id="user" placeholder="Mã sinh viên">
+<input id="pass" type="password" placeholder="Mật khẩu">
+<button onclick="login()">Đăng nhập</button>
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none;">
+
+<div style="
+    background:#0d5ea6;
+    color:white;
+    text-align:center;
+    font-weight:bold;
+    padding:6px;
+    letter-spacing:0.5px;
+">
+ĐẠI HỌC CÔNG NGHỆ THÔNG TIN TP HỒ CHÍ MINH
+</div>
+
+<div class="header">
+Chào bạn <b>Lê Phú Tài (2286608207)</b> | Xem điểm
+</div>
+
+<div class="nav">
+<span>TRANG CHỦ</span>
+<span>XEM ĐIỂM</span>
+<span>XEM HỌC PHÍ</span>
+<span>THÔNG TIN CÁ NHÂN</span>
+</div>
+
+<div class="container">
+
+<div class="info-box">
+<table>
+<tr><td>Mã sinh viên</td><td>2286608207</td></tr>
+<tr><td>Họ tên</td><td>Lê Phú Tài</td></tr>
+<tr><td>Ngành</td><td>Digital Marketing</td></tr>
+<tr><td>Khoa</td><td>Marketing – KDQT</td></tr>
+<tr><td>Khóa học</td><td>2022 – 2026</td></tr>
+</table>
+</div>
+
+<div id="grades"></div>
+</div>
+</div>
+
+<script>
+function toGPA4(score){
+    if(score >= 8.5) return 4.0;
+    if(score >= 7.0) return 3.0;
+    if(score >= 5.5) return 2.0;
+    if(score >= 4.0) return 1.0;
+    return 0;
+}
+
+const semesters = [
+{
+title:"Học kỳ 1 – Năm học 2023–2024",
+subjects:[
+["Marketing căn bản",3,0,0],
+["Kinh tế vi mô",3,0,0],
+["Tin học ứng dụng",3,0,0],
+["Pháp luật đại cương",3,0,0],
+["Kỹ năng học đại học",3,0,0]
+]
+},
+{
+title:"Học kỳ 2 – Năm học 2023–2024",
+subjects:[
+["Hành vi khách hàng",3,0,0],
+["Marketing dịch vụ",3,0,0],
+["Kinh tế vĩ mô",3,0,0],
+["Xác suất thống kê",3,0,0],
+["Kỹ năng giao tiếp",3,0,0]
+]
+},
+{
+title:"Học kỳ 3 – Năm học 2023–2024 (Hè)",
+subjects:[
+["Tâm lý học marketing",3,7.0,7.2],
+["Kỹ năng thuyết trình",3,7.1,7.3],
+["Văn hóa doanh nghiệp",3,6.9,7.0],
+["Tư duy sáng tạo",3,7.2,7.4],
+["Thực tập nhận thức",3,7.5,7.7]
+]
+},
+{
+title:"Học kỳ 1 – Năm học 2024–2025",
+subjects:[
+["Marketing số",3,7.2,7.4],
+["Nghiên cứu thị trường",3,7.0,7.2],
+["Quản trị bán hàng",3,6.9,7.0],
+["Truyền thông marketing",3,7.1,7.3],
+["Tâm lý học ứng dụng",3,6.8,7.0]
+]
+},
+{
+title:"Học kỳ 2 – Năm học 2024–2025",
+subjects:[
+["SEO & Content Marketing",3,7.3,7.5],
+["Marketing mạng xã hội",3,7.0,7.2],
+["PR & Quan hệ công chúng",3,6.9,7.1],
+["Phân tích dữ liệu marketing",3,7.2,7.4],
+["Thương mại điện tử",3,7.1,7.3]
+]
+},
+{
+title:"Học kỳ 3 – Năm học 2024–2025 (Hè)",
+subjects:[
+["Dự án marketing",3,7.4,7.6],
+["Khởi nghiệp",3,6.9,7.1],
+["Đạo đức kinh doanh",3,7.0,7.2],
+["Quản trị thương hiệu",3,7.2,7.4],
+["Thực tập chuyên ngành",3,7.6,7.8]
+]
+},
+{
+title:"Học kỳ 1 – Năm học 2025–2026",
+subjects:[
+["Chiến lược marketing",3,7.2,7.4],
+["Quản trị marketing",3,7.0,7.2],
+["Marketing quốc tế",3,6.9,7.1],
+["Quảng cáo",3,7.1,7.3],
+["Nghiên cứu hành vi người tiêu dùng",3,7.0,7.2],
+["Marketing B2B",3,6.8,7.0],
+["Quản trị kênh phân phối",3,7.1,7.3],
+["Marketing tích hợp (IMC)",3,7.2,7.4],
+["Dự án tốt nghiệp (Marketing)",3,7.8,8.0]
+]
+}
+];
+
+const box=document.getElementById("grades");
+
+semesters.forEach(s=>{
+let tc=0,sum10=0,sum4=0;
+
+let rows=s.subjects.map(m=>{
+let qt=m[2], thi=m[3];
+let tk10=(qt+thi)/2;
+let tk4=toGPA4(tk10);
+let kq=tk10>=4 ? "Đạt":"Rớt";
+
+tc+=m[1];
+sum10+=m[1]*tk10;
+sum4+=m[1]*tk4;
+
+return `
+<tr>
+<td>${m[0]}</td>
+<td>${m[1]}</td>
+<td>50</td>
+<td>50</td>
+<td>${qt}</td>
+<td>${thi}</td>
+<td>${tk10.toFixed(2)}</td>
+<td>${tk4}</td>
+<td class="${kq==="Đạt"?"pass":"fail"}">${kq}</td>
+</tr>`;
+}).join("");
+
+box.innerHTML+=`
+<div class="semester-title">${s.title}</div>
+<table>
+<tr>
+<th>Môn học</th><th>TC</th><th>%QT</th><th>%Thi</th>
+<th>Điểm QT</th><th>Điểm Thi</th>
+<th>TK(10)</th><th>TK(CH)</th><th>KQ</th>
+</tr>
+${rows}
+</table>
+<div class="summary">
+GPA (10): ${(sum10/tc).toFixed(2)} | GPA (4): ${(sum4/tc).toFixed(2)} | Tín chỉ: ${tc}
+</div>`;
+});
+
+function login(){
+if(user.value==="2286608207" && pass.value==="123456"){
+loginBox.style.display="none";
+main.style.display="block";
+}else alert("Sai thông tin đăng nhập");
+}
+</script>
+
+</body>
+</html>
